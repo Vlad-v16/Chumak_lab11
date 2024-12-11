@@ -1,0 +1,68 @@
+#include <iostream>
+#include <regex>
+#include <string>
+#include <windows.h>
+
+using namespace std;
+
+struct Reservation
+{
+private:
+    string reservationNumber;  
+    string date;               
+    string roomNumber;        
+
+public:
+    Reservation(const string& resNum, const string& d, const string& roomNum)
+        : reservationNumber(resNum), date(d), roomNumber(roomNum) {}
+
+    string getReservationNumber() const 
+    {
+        return reservationNumber;
+    }
+
+    string getDate() const 
+    {
+        return date;
+    }
+
+    string getRoomNumber() const 
+    {
+        return roomNumber;
+    }
+
+    int getFloorFromRoomNumber() const 
+    {
+        regex roomPattern("^([1-9][0-9]*)$");
+        smatch match;
+
+        if (regex_match(roomNumber, match, roomPattern))
+        {
+            return roomNumber[0] - '0';
+        }
+        else 
+        {
+            cout << "Невірний номер кімнати!" << endl;
+            return -1;
+        }
+    }
+};
+
+int main() 
+{
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+
+    Reservation res("A123", "2024-12-11", "302");
+
+    cout << "Номер бронювання: " << res.getReservationNumber() << endl;
+    cout << "Дата бронювання: " << res.getDate() << endl;
+    cout << "Номер кімнати: " << res.getRoomNumber() << endl;
+
+    int floor = res.getFloorFromRoomNumber();
+    if (floor != -1) 
+    {
+        cout << "Кімната знаходиться на " << floor << "-му поверсі." << endl;
+    }
+    return 0;
+}
